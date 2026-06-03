@@ -1,4 +1,4 @@
-use crate::Pose;
+use crate::executor::Pose;
 
 #[derive(Copy, Clone)]
 pub(crate) enum Action {

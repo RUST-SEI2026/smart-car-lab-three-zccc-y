@@ -1,16 +1,17 @@
-use super::state::State;
-use crate::Pose;
+use crate::action::Assembler;
+use crate::state::State;
+use super::pose::Pose;
 
 pub struct Executor {
-    pose: Pose,
-    state: State,
+    pub(super) pose: Pose,
+    pub(super) state: Box<dyn Assembler>,
 }
 
 impl Executor {
     pub fn with_pose(pose: Pose) -> Self {
         Executor {
             pose,
-            state: State::default(),
+            state: Box::new(State::default()),
         }
     }
 
@@ -20,8 +21,8 @@ impl Executor {
                 'B' => self.state.be_reverse(),
                 'F' => self.state.be_fast(),
                 _ => {
-                    let astions = self.state.assemble(cmd);
-                    for action in astions {
+                    let actions = self.state.assemble(cmd);
+                    for action in actions {
                         action.perform(&mut self.pose)
                     }
                 }
